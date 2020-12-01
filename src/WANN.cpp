@@ -90,8 +90,10 @@ List WANN::query_FR_ragged(NumericMatrix query, const int k, const double radius
   ANNdistArray dists = new ANNdist[k];
 
   // declare lists for return values here
-  List rdists(nq);
-  List ridx(nq);
+  //List rdists(nq);
+  //List ridx(nq);
+  std::vector<std::vector<double> > rdists(nq, std::vector<double>());
+  std::vector<std::vector<int> > ridx(nq, std::vector<int>());
 
   const ANNdist sqRad = (ANNdist) (radius * radius);
 
