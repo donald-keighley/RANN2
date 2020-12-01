@@ -90,10 +90,10 @@ List WANN::query_FR_ragged(NumericMatrix query, const int k, const double radius
   ANNdistArray dists = new ANNdist[k];
 
   // declare lists for return values here
-  //List rdists(nq);
-  //List ridx(nq);
-  std::vector<std::vector<double> > rdists(nq, std::vector<double>());
-  std::vector<std::vector<int> > ridx(nq, std::vector<int>());
+  List rdists(nq);
+  List ridx(nq);
+  //std::vector<std::vector<double> > rdists(nq, std::vector<double>());
+  //std::vector<std::vector<int> > ridx(nq, std::vector<int>());
 
   const ANNdist sqRad = (ANNdist) (radius * radius);
 
@@ -112,13 +112,16 @@ List WANN::query_FR_ragged(NumericMatrix query, const int k, const double radius
       nn_idx, // nearest neighbor array (modified)
       dists, // dist to near neighbors (modified)
       eps); // error bound
-
+    std::vector<double> rdists_element;
+    std::vector<int> ridx_element;
     for (int j = 0; j < std::min(npts,k); j++) {
       // un-square distance
-      rdists[i].emplace_back(std::sqrt(dists[j]));
+      rdists_element.emplace_back(std::sqrt(dists[j]));
       // put indices in returned array (nb +1 for R)
-      ridx[i].emplace_back(nn_idx[j] + 1);
+      ridx_element.emplace_back(nn_idx[j] + 1);
     }
+    rdists[i]=rdists_element;
+    ridx[i]=ridx_element;
   }
 
   annDeallocPt(pq);
