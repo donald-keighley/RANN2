@@ -113,18 +113,12 @@ List WANN::query_FR_ragged(NumericMatrix query, const int k, const double radius
       dists, // dist to near neighbors (modified)
       eps); // error bound
 
-    // creates the vectors to contain the distances and indices
-    std::vector<double> rdists_element(npts);
-    std::vector<int> ridx_element(npts);
-    for (int j = 0; j < npts; j++) {
+    for (int j = 0; j < std::min(npts,k); j++) {
       // un-square distance
-      rdists_element[j] = std::sqrt(dists[j]);
+      rdists[i].emplace_back(std::sqrt(dists[j]));
       // put indices in returned array (nb +1 for R)
-      ridx_element[j] = nn_idx[j] + 1;
+      ridx[i].emplace_back(nn_idx[j] + 1);
     }
-    // adds the distances and indices to the output ragged lists
-    rdists[i] = rdists_element;
-    ridx[i] = ridx_element;
   }
 
   annDeallocPt(pq);
